@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
@@ -10,15 +10,20 @@ import { toast } from "react-toastify";
 
 import { setAdminDetails } from "../store/adminSlice";
 import { IoIosNotificationsOutline } from "react-icons/io";
-
+import { MdOutlinePayment } from "react-icons/md";
+import Context from "../context";
 const Header = () => {
+  const context = useContext(Context);
+
   const admin = useSelector((state) => state?.admin?.admin);
   const dispatch = useDispatch();
-  const [nbNotification, SetNbNotification] = useState(0);
-  const [allNotifications, SetAllNotifications] = useState([]);
 
   const [menuDisplay, setMenuDisplay] = useState(false);
   const [notifactionUser, SetNotificationUser] = useState(false);
+
+  const [notifactionDemandes, SetNotificationDemandes] = useState(false);
+  const [notifactionPaiement, SetNotificationPaiement] = useState(false);
+
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -33,40 +38,6 @@ const Header = () => {
       toast.success(data.message);
       dispatch(setAdminDetails(null));
       navigate("/");
-    }
-
-    if (data.error) {
-      toast.error(data.message);
-    }
-  };
-
-  const getNbNotifiaction = async () => {
-    const fetchData = await fetch(Api.numberNotification.url, {
-      method: Api.numberNotification.method,
-      credentials: "include",
-    });
-
-    const data = await fetchData.json();
-
-    if (data.success) {
-      SetNbNotification(data?.data);
-    }
-
-    if (data.error) {
-      toast.error(data.message);
-    }
-  };
-
-  const getAllNotification = async () => {
-    const fetchData = await fetch(Api.allNotification.url, {
-      method: Api.allNotification.method,
-      credentials: "include",
-    });
-
-    const data = await fetchData.json();
-
-    if (data.success) {
-      SetAllNotifications(data?.data);
     }
 
     if (data.error) {
@@ -89,21 +60,20 @@ const Header = () => {
     const dataApi = await dataResponse.json();
 
     if (dataApi.success) {
-      getAllNotification();
-      getNbNotifiaction();
-      navigate("/admin-panel/users");
+      context?.getNbNotifiactionUser();
+      context?.getNbNotifiactionDemandes();
+      context?.getAllNotification();
+      context?.getAllNotificationDemandes();
+      context?.getNbNotifiactionPaiement();
+      context?.getAllNotificationPaiements();
       SetNotificationUser(false);
+      SetNotificationDemandes(false);
     }
 
     if (dataApi.error) {
       toast.error(dataApi.message);
     }
   };
-
-  useEffect(() => {
-    getAllNotification();
-    getNbNotifiaction();
-  }, [nbNotification]);
 
   return (
     <header className="h-16 shadow-md bg-white fixed w-full z-40">
@@ -114,24 +84,94 @@ const Header = () => {
 
         <div className="flex items-center gap-7">
           <div className="relative flex justify-center">
-            <div className="text-3xl cursor-pointer relative flex justify-center">
-              <IoIosNotificationsOutline />
+            <div
+              className="text-3xl cursor-pointer relative flex justify-center"
+              onClick={() => SetNotificationPaiement((prev) => !prev)}
+            >
+              <MdOutlinePayment />
               <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-2/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {nbNotification}
+                {context?.nbNotificationPaiement}
               </span>
             </div>
+
+            {notifactionPaiement && (
+              <div className="absolute box bg-white bottom-0 top-11 h-fit p-4 shadow-lg rounded w-auto md:w-auto">
+                <nav>
+                  <>
+                    <div className="flex items-center space-x-2 md:space-x-4">
+                      <h1 className="whitespace-nowrap  cursor-pointer hover:text-blue-500 hover:underline">
+                        {context?.nbNotificationPaiement} Nouveau Virement
+                      </h1>
+                    </div>
+
+                    {context?.allNotificationsPaiement?.map((el, index) => (
+                      <div
+                        key={index}
+                        className=" bg-slate-200 rounded-lg h-12 justify-center text-start p-1 cursor-pointer mt-1"
+                        onClick={() => {
+                          UpdateNotification(el?._id);
+                          navigate("/admin-panel/liste-demande");
+                        }}
+                      >
+                        <hr />
+                        <span className=" font-bold">{el?.message} </span>
+                        <hr />
+                      </div>
+                    ))}
+                  </>
+                </nav>
+              </div>
+            )}
+          </div>
+
+          <div className="relative flex justify-center">
+            <div
+              className="text-3xl cursor-pointer relative flex justify-center"
+              onClick={() => SetNotificationDemandes((prev) => !prev)}
+            >
+              <IoIosNotificationsOutline />
+              <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-2/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {context?.nbNotificationDemande}
+              </span>
+            </div>
+
+            {notifactionDemandes && (
+              <div className="absolute box bg-white bottom-0 top-11 h-fit p-4 shadow-lg rounded w-auto md:w-auto">
+                <nav>
+                  <>
+                    <div className="flex items-center space-x-2 md:space-x-4">
+                      <h1 className="whitespace-nowrap  cursor-pointer hover:text-blue-500 hover:underline">
+                        {context?.nbNotificationDemande} Nouveau Demandes
+                      </h1>
+                    </div>
+
+                    {context?.allNotificationsDemandes?.map((el, index) => (
+                      <div
+                        key={index}
+                        className=" bg-slate-200 rounded-lg h-12 justify-center text-start p-1 cursor-pointer mt-1"
+                        onClick={() => {
+                          UpdateNotification(el?._id);
+                          navigate("/admin-panel/liste-demande");
+                        }}
+                      >
+                        <hr />
+                        <span className=" font-bold">{el?.message} </span>
+                        <hr />
+                      </div>
+                    ))}
+                  </>
+                </nav>
+              </div>
+            )}
           </div>
           <div className="relative flex justify-center">
             <div
               className="text-3xl cursor-pointer relative flex justify-center"
-             
-              onMouseEnter={() => SetNotificationUser((preve) => !preve)}
-              
               onClick={() => SetNotificationUser((prev) => !prev)}
             >
               <TiMessage />
               <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-2/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {nbNotification}
+                {context?.nbNotificationUser}
               </span>
             </div>
 
@@ -141,16 +181,17 @@ const Header = () => {
                   <>
                     <div className="flex items-center space-x-2 md:space-x-4">
                       <h1 className="whitespace-nowrap  cursor-pointer hover:text-blue-500 hover:underline">
-                        {nbNotification} Nouveau Utilisateurs
+                        {context?.nbNotificationUser} Nouveau Utilisateurs
                       </h1>
                     </div>
 
-                    {allNotifications.map((el, index) => (
+                    {context?.allNotifications?.map((el, index) => (
                       <div
                         key={index}
                         className=" bg-slate-200 rounded-lg h-12 justify-center text-start p-1 cursor-pointer"
                         onClick={() => {
                           UpdateNotification(el?._id);
+                          navigate("/admin-panel/users");
                         }}
                       >
                         <hr />

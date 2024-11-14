@@ -10,18 +10,14 @@ import { IoIosInformationCircle } from "react-icons/io";
 import { CgComponents } from "react-icons/cg";
 const AdminPanel = () => {
   const admin = useSelector((state) => state?.admin?.admin);
-  
-  
+
   const location = useLocation();
-  
+
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to manage mobile menu
 
   const isActive = (path) => location.pathname === path;
 
-
-  useEffect(() => {
-    
-  }, [admin]);
+  useEffect(() => {}, [admin]);
 
   return (
     <div className="min-h-[calc(100vh-120px)] flex flex-col md:flex-row">
@@ -29,7 +25,7 @@ const AdminPanel = () => {
         <div className="flex items-center">
           {admin?.photo ? (
             <img
-              src={process.env.REACT_APP_API_URL+admin?.photo}
+              src={process.env.REACT_APP_API_URL + admin?.photo}
               className="w-10 h-10 rounded-full"
               alt={admin?.name}
             />
@@ -52,53 +48,61 @@ const AdminPanel = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <nav className="bg-white p-4 md:hidden">
-       
-
           <Link
             to="/admin-panel/users"
             className={`block px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/users") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/users")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
             <FaUsers className="mr-2 w-5 h-5 inline" /> Liste des clients
           </Link>
 
-
           <Link
             to="/admin-panel/liste-demande"
             className={`block px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/liste-demande") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/liste-demande")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
-            <IoReceiptSharp className="mr-2 w-5 h-5 inline" /> Liste des demandes
+            <IoReceiptSharp className="mr-2 w-5 h-5 inline" /> Liste des
+            demandes
           </Link>
 
-      
           <Link
             to="/admin-panel/materiel"
             className={`block px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/materiel") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/materiel")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
-            <BiCategoryAlt className="mr-2 w-5 h-5 inline" /> Matériel
+            <BiCategoryAlt className="mr-2 w-5 h-5 inline" /> Matières
           </Link>
 
           <Link
             to="/admin-panel/components"
             className={`block px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/components") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/components")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
-            <CgComponents className="mr-2 w-5 h-5 inline" /> Componets
+            <CgComponents className="mr-2 w-5 h-5 inline" /> Composants
           </Link>
 
           <Link
             to="/admin-panel/information"
             className={`block px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/information") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/information")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
-            <IoIosInformationCircle className="mr-2 w-5 h-5 inline" /> information
+            <IoIosInformationCircle className="mr-2 w-5 h-5 inline" />{" "}
+            information
           </Link>
         </nav>
       )}
@@ -109,7 +113,7 @@ const AdminPanel = () => {
           <div className="text-5xl cursor-pointer relative flex justify-center">
             {admin?.photo ? (
               <img
-              src={process.env.REACT_APP_API_URL+admin?.photo}
+                src={process.env.REACT_APP_API_URL + admin?.photo}
                 className="w-20 h-20 rounded-full"
                 alt={admin?.name}
               />
@@ -122,11 +126,12 @@ const AdminPanel = () => {
         </div>
 
         <nav className="grid p-4">
-          
           <Link
             to="/admin-panel/users"
             className={`flex items-center px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/users") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/users")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
             <FaUsers className="mr-2 w-10 h-6" /> Liste des clients
@@ -135,35 +140,42 @@ const AdminPanel = () => {
           <Link
             to="/admin-panel/liste-demande"
             className={`flex items-center px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/liste-demande") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/liste-demande")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
             <IoReceiptSharp className="mr-2 w-10 h-6" /> Liste des demandes
           </Link>
 
-          
           <Link
             to="/admin-panel/materiel"
             className={`flex items-center px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/materiel") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/materiel")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
-            <BiCategoryAlt className="mr-2 w-10 h-6" /> Matériel
+            <BiCategoryAlt className="mr-2 w-10 h-6" /> Matières
           </Link>
 
           <Link
             to="/admin-panel/components"
             className={`flex items-center px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/components") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/components")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
-            <CgComponents className="mr-2 w-10 h-6" /> Componets
+            <CgComponents className="mr-2 w-10 h-6" /> Composants
           </Link>
 
           <Link
             to="/admin-panel/information"
             className={`flex items-center px-2 py-1 rounded-full mt-2 ${
-              isActive("/admin-panel/information") ? "bg-slate-300" : "hover:bg-slate-500"
+              isActive("/admin-panel/information")
+                ? "bg-slate-300"
+                : "hover:bg-slate-500"
             }`}
           >
             <IoIosInformationCircle className="mr-2 w-9 h-6" /> information

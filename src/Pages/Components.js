@@ -1,40 +1,34 @@
 import React, { useEffect, useState } from "react";
 import Api from "../common";
 import { toast } from "react-toastify";
-import { MdModeEdit,MdDelete } from "react-icons/md";
+import { MdModeEdit, MdDelete } from "react-icons/md";
 import UpdateComponent from "../components/UpdateComponent";
 import UploadComponent from "../components/UploadComponent";
 
 function Components() {
-
   const [editComponent, setEditComponent] = useState(false);
   const [allComponents, setAllComponents] = useState([]);
-  const [uploadComponet,SetUploadComponent]=useState(false)
-  const [detailsComponents,SetDetailsComponents]=useState({
-    _id:"",
-    component:"",
-    prix:0,
-    matiere:{
-      nom:""
-    }
-  })
+  const [uploadComponet, SetUploadComponent] = useState(false);
+  const [detailsComponents, SetDetailsComponents] = useState({
+    _id: "",
+    component: "",
+    prix: 0,
+    matiere: {
+      nom: "",
+    },
+  });
 
   const fetchAllComponents = async () => {
     try {
-      const fetchData = await fetch(
-        `${Api.component.url}`,
-        {
-          method: Api.component.method,
-          credentials: "include",
-        }
-      );
+      const fetchData = await fetch(`${Api.component.url}`, {
+        method: Api.component.method,
+        credentials: "include",
+      });
 
-      
       const dataResponse = await fetchData.json();
 
       if (dataResponse.success) {
         setAllComponents(dataResponse.data);
-       
       } else if (dataResponse.error) {
         toast.error(dataResponse.message);
       }
@@ -43,50 +37,44 @@ function Components() {
     }
   };
 
-
-  const deleteComponent=async(id)=>{
+  const deleteComponent = async (id) => {
     const dataResponse = await fetch(Api.deleteComponent.url, {
       method: Api.deleteComponent.method,
-      credentials: 'include',
+      credentials: "include",
       headers: {
-          'Content-Type': 'application/json', 
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         componentId: id,
       }),
-  });
+    });
 
-  const dataApi = await dataResponse.json();
+    const dataApi = await dataResponse.json();
 
-  if (dataApi.success) {
+    if (dataApi.success) {
       toast.success(dataApi.message);
       fetchAllComponents();
-  }
+    }
 
-  if (dataApi.error) {
+    if (dataApi.error) {
       toast.error(dataApi.message);
-  }
-
-  }
-
-
-  
+    }
+  };
 
   useEffect(() => {
     fetchAllComponents();
   }, []);
 
-
   return (
     <div className="p-4">
       <div className="bg-white py-2 px-4 flex justify-between items-center flex-wrap">
-        <h2 className="font-bold text-lg">Liste des componets</h2>
+        <h2 className="font-bold text-lg">Liste des Composants</h2>
         <button
-      className="border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all py-1 px-3 rounded-full"
-    onClick={() => SetUploadComponent(true)}
-    >
-      Ajouter componet
-    </button>
+          className="border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all py-1 px-3 rounded-full"
+          onClick={() => SetUploadComponent(true)}
+        >
+          Ajouter Composant
+        </button>
       </div>
 
       {/* Table for Desktop */}
@@ -104,34 +92,32 @@ function Components() {
           <tbody>
             {allComponents.map((el, index) => (
               <tr key={index}>
-                <td>{ index + 1}</td>
-        
+                <td>{index + 1}</td>
+
                 <td>{el.component}</td>
                 <td>{el.prix}</td>
                 <td>{el.matiere?.nom}</td>
-             
-             
-                <td className="flex  justify-center items-center">
-              <button
-                className="bg-green-100 p-2 mr-3 rounded-full cursor-pointer hover:bg-green-500 hover:text-white"
-                onClick={() => {
-                
-                  setEditComponent(true)
-                  SetDetailsComponents(el)
-                }}
-              >
-                <MdModeEdit />
-              </button>
 
-              <button
-                className="bg-red-100 p-2 rounded-full cursor-pointer hover:bg-red-500 hover:text-white"
-                onClick={() => {
-                  deleteComponent(el?._id)
-                }}
-              >
-                <MdDelete />
-              </button>
-            </td>
+                <td className="flex  justify-center items-center">
+                  <button
+                    className="bg-green-100 p-2 mr-3 rounded-full cursor-pointer hover:bg-green-500 hover:text-white"
+                    onClick={() => {
+                      setEditComponent(true);
+                      SetDetailsComponents(el);
+                    }}
+                  >
+                    <MdModeEdit />
+                  </button>
+
+                  <button
+                    className="bg-red-100 p-2 rounded-full cursor-pointer hover:bg-red-500 hover:text-white"
+                    onClick={() => {
+                      deleteComponent(el?._id);
+                    }}
+                  >
+                    <MdDelete />
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -143,12 +129,12 @@ function Components() {
         {allComponents.map((el, index) => (
           <div
             key={index}
-             className="border rounded-lg p-4 mb-4 shadow-md bg-gray-50"
+            className="border rounded-lg p-4 mb-4 shadow-md bg-gray-50"
           >
             <p>
               <strong>Index:</strong> {index + 1}
             </p>
-         
+
             <p>
               <strong>Titre:</strong> {el.component}
             </p>
@@ -159,55 +145,44 @@ function Components() {
             <p>
               <strong>Materiel:</strong> {el.matiere?.nom}
             </p>
-           
-          
+
             <button
-          className="bg-green-100 p-2 mr-4 rounded-full cursor-pointer hover:bg-green-500 hover:text-white mt-2"
-          onClick={() => {
-            setEditComponent(true)
-            SetDetailsComponents(el)
-          }}
-        >
-          <MdModeEdit />
-        </button>
-        <button
-          className="bg-red-100 p-2 rounded-full cursor-pointer hover:bg-red-500 hover:text-white mt-2"
-          onClick={() => {
-            deleteComponent(el?._id)
-          }}
-        >
-         <MdDelete />
-        </button>
-           
-       
+              className="bg-green-100 p-2 mr-4 rounded-full cursor-pointer hover:bg-green-500 hover:text-white mt-2"
+              onClick={() => {
+                setEditComponent(true);
+                SetDetailsComponents(el);
+              }}
+            >
+              <MdModeEdit />
+            </button>
+            <button
+              className="bg-red-100 p-2 rounded-full cursor-pointer hover:bg-red-500 hover:text-white mt-2"
+              onClick={() => {
+                deleteComponent(el?._id);
+              }}
+            >
+              <MdDelete />
+            </button>
           </div>
         ))}
       </div>
-          {
-            editComponent && (
-              <UpdateComponent 
-              onClose={() =>setEditComponent(false)}
-              component={detailsComponents.component}
-              prixComponent={detailsComponents.prix}
-             
-              matiere={detailsComponents.matiere}
-              componentId={detailsComponents?._id}
-              callFunc={fetchAllComponents}
-               
-               
-               />
-            )
-          }
+      {editComponent && (
+        <UpdateComponent
+          onClose={() => setEditComponent(false)}
+          component={detailsComponents.component}
+          prixComponent={detailsComponents.prix}
+          matiere={detailsComponents.matiere}
+          componentId={detailsComponents?._id}
+          callFunc={fetchAllComponents}
+        />
+      )}
 
-
-{
-            uploadComponet && (
-              <UploadComponent
-              onClose={()=>SetUploadComponent(false)}
-              fetchData={fetchAllComponents}
-              />
-            )
-          }
+      {uploadComponet && (
+        <UploadComponent
+          onClose={() => SetUploadComponent(false)}
+          fetchData={fetchAllComponents}
+        />
+      )}
 
       {/* Pagination */}
       {/* <div className="flex justify-between items-center py-4 p-5">
@@ -245,11 +220,8 @@ function Components() {
           callFunc={fetchAllUsers}
         />
       )} */}
-
-
-
     </div>
   );
 }
 
-export default Components
+export default Components;

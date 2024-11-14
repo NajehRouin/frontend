@@ -10,14 +10,14 @@ import DetailAnalyse from "../components/DetailAnalyse";
 import Resultat from "../components/Resultat";
 function Demande() {
   const [allDemande, SetAllDemandes] = useState([]);
-const [openDemande,SetOpneDemand]=useState(false)
-const [openAnalyse,SetOpenAnalyse]=useState(false)
-const [openResultat,SetOpneresultat]=useState(false)
-const [detaillDemande,SetDetaillDemande]=useState({
-  _id:"",
-  fichierPaiment:"",
-  analyses:[]
-})
+  const [openDemande, SetOpneDemand] = useState(false);
+  const [openAnalyse, SetOpenAnalyse] = useState(false);
+  const [openResultat, SetOpneresultat] = useState(false);
+  const [detaillDemande, SetDetaillDemande] = useState({
+    _id: "",
+    fichierPaiment: "",
+    analyses: [],
+  });
   const fetchAllDemandes = async () => {
     try {
       const fetchData = await fetch(`${Api.getAllAnaylse.url}`, {
@@ -56,7 +56,9 @@ const [detaillDemande,SetDetaillDemande]=useState({
               <th>Client</th>
               <th>CIN</th>
               <th>N°Téléphone</th>
+              <th>Adresse</th>
               <th>Projet</th>
+
               <th>Objectif</th>
               <th>type Analyse</th>
               <th>prix Analyse</th>
@@ -73,6 +75,7 @@ const [detaillDemande,SetDetaillDemande]=useState({
                 <td>{el?.nomUser}</td>
                 <td>{el?.cin}</td>
                 <td>{el?.numPhone}</td>
+                <td>{el?.adresse}</td>
                 <td>{el?.projet}</td>
                 <td>{el?.objectif}</td>
                 <td>{el?.typeAnalyse}</td>
@@ -86,29 +89,29 @@ const [detaillDemande,SetDetaillDemande]=useState({
                 </td>
                 <td>{moment(el.createdAt).format("LL")}</td>
                 <td className="flex justify-evenly p-3 items-center">
-                <button
+                  <button
                     className="bg-green-100 p-2 rounded-full cursor-pointer hover:bg-green-500 hover:text-white"
                     onClick={() => {
-                      SetDetaillDemande(el)
-                      SetOpenAnalyse(true)
+                      SetDetaillDemande(el);
+                      SetOpenAnalyse(true);
                     }}
                   >
-                   <BiAnalyse />
+                    <BiAnalyse />
                   </button>
-                <button
+                  <button
                     className="bg-green-100 p-2 rounded-full cursor-pointer hover:bg-green-500 hover:text-white"
                     onClick={() => {
-                      SetDetaillDemande(el)
-                      SetOpneDemand(true)
+                      SetDetaillDemande(el);
+                      SetOpneDemand(true);
                     }}
                   >
-                   <FaEye />
+                    <FaEye />
                   </button>
-                <button
+                  <button
                     className="bg-green-100 p-2 rounded-full cursor-pointer hover:bg-cyan-500 hover:text-white"
                     onClick={() => {
-                      SetOpneresultat(true)
-                      SetDetaillDemande(el)
+                      SetOpneresultat(true);
+                      SetDetaillDemande(el);
                     }}
                   >
                     <MdModeEdit />
@@ -120,43 +123,30 @@ const [detaillDemande,SetDetaillDemande]=useState({
         </table>
       </div>
 
-
-      {
-        openDemande && (
-          <DetailDemande
-          onClose={() =>SetOpneDemand(false)}
-          idAnalyse={detaillDemande?._id} 
+      {openDemande && (
+        <DetailDemande
+          onClose={() => SetOpneDemand(false)}
+          idAnalyse={detaillDemande?._id}
           fichierPaiment={detaillDemande?.fichierPaiment}
           callFunc={fetchAllDemandes}
+        />
+      )}
 
-          />
-        )
-      }
-
-
-      {
-        openAnalyse && (
-          <DetailAnalyse
-          onClose={() =>SetOpenAnalyse(false)}
-          idAnalyse={detaillDemande?._id} 
+      {openAnalyse && (
+        <DetailAnalyse
+          onClose={() => SetOpenAnalyse(false)}
+          idAnalyse={detaillDemande?._id}
           callFunc={fetchAllDemandes}
-          />
-        )
-      }
+        />
+      )}
 
-      {
-        openResultat && 
-        (
-          <Resultat 
-          onClose={() =>SetOpneresultat(false)}
-          idAnalyse={detaillDemande?._id} 
-       
-          
+      {openResultat && (
+        <Resultat
+          onClose={() => SetOpneresultat(false)}
+          idAnalyse={detaillDemande?._id}
           fetchData={fetchAllDemandes}
-          
-          />
-        )
-      }
+        />
+      )}
 
       {/* Cards for Mobile */}
     </div>
